@@ -1,9 +1,9 @@
-
 package dialer
 
 import (
-	storage2 "github.com/oakeshq/go-starter/internal/storage"
 	"log"
+
+	storage2 "github.com/oakeshq/go-starter/internal/storage"
 
 	"github.com/cenkalti/backoff/v4"
 	_ "github.com/lib/pq"
@@ -32,13 +32,10 @@ func Connect(config *config.Config) (*gorm.DB, error) {
 	}
 
 	err := backoff.Retry(operation, backoff.WithMaxRetries(backoff.NewExponentialBackOff(), 5))
-
 	if err != nil {
 		return nil, err
 	}
 
-	//if logrus.StandardLogger().Level == logrus.DebugLevel {
-	//}
 	db.Logger = db.Logger.LogMode(logger.Info)
 
 	sqlDB, err := db.DB()
@@ -63,7 +60,6 @@ func Migrate(db *gorm.DB) error {
 		return err
 	}
 
-
 	if err := db.AutoMigrate(allModels...); err != nil {
 		return err
 	}
@@ -76,4 +72,3 @@ func Migrate(db *gorm.DB) error {
 
 	return nil
 }
-

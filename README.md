@@ -9,11 +9,11 @@ were considered the best tools, and started this kit.
 # External packages
 The starter kit uses the following Go packages. They can be easily replaceable, their uses are highly localized and abstrated.
   * Routing: [go-chi](https://github.com/go-chi/chi)
-  * Logging [logrus](https://github.com/sirupsen/logrus)
+  * Logging [zap](https://github.com/uber-go/zap)
   * ORM [gorm](https://github.com/go-gorm/gorm)
   * CLI [cobra](https://github.com/spf13/cobra)
   * Configuration [viper](https://github.com/spf13/viper)
-  * Auto docker recompile [reflex](https://github.com/acim/go-reflex) 
+  * Auto docker recompile [reflex](https://github.com/acim/go-reflex)
 
 ![Test](https://github.com/oakeshq/go-starter/workflows/Test/badge.svg)
 [![Go Report Card](https://goreportcard.com/badge/github.com/qreasio/go-starter-kit)](https://goreportcard.com/report/github.com/qreasio/go-starter-kit)
@@ -22,4 +22,4 @@ The starter kit uses the following Go packages. They can be easily replaceable, 
 Easy way to start would be using docker-compose. The command bellow will start two containers, the Go service and the PostgreSQL container. With the use of reflex docker containers can be used for local development aswell.
 ```
 docker-compose -f ./d8t/docker-compose.dev.yml up
-``` 
+```

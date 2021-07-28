@@ -13,7 +13,7 @@ import (
 	"github.com/oakeshq/go-starter/pkg/logs"
 	gmiddleware "github.com/oakeshq/go-starter/pkg/middleware"
 	"github.com/rs/cors"
-	"github.com/sirupsen/logrus"
+	"go.uber.org/zap"
 	"gorm.io/gorm"
 
 	"github.com/oakeshq/go-starter/pkg/router"
@@ -46,7 +46,10 @@ func NewAPI(
 	r.Chi.Use(middleware.RealIP)
 	r.Use(gmiddleware.RequestIDCtx)
 	r.Use(httperr.Recoverer)
-	r.UseBypass(logs.NewStructuredLogger(logrus.StandardLogger()))
+
+	logger, _ := zap.NewProduction()
+	defer logger.Sync() // flushes buffer, if any
+	r.UseBypass(logs.NewStructuredLogger(logger))
 
 	corsHandler := cors.New(cors.Options{
 		AllowedMethods:   []string{"GET", "POST", "PATCH", "PUT", "DELETE"},
@@ -56,10 +59,6 @@ func NewAPI(
 	})
 
 	healthcheck.RegisterHandlers(r)
-
-	r.Route("/v1", func(r *router.Router) {
-		r.Get("/users", api.ListUsers)
-	})
 
 	api.handler = corsHandler.Handler(chi.ServerBaseContext(ctx, r))
 	return api

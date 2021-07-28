@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"go.uber.org/zap"
 )
 
 // Config the asd.json file should be set at the root level
@@ -35,7 +35,6 @@ func LoadTestConfig(path string) (*Config, error) {
 // LoadConfig should load and unmarshal the config file
 func LoadConfig(cmd *cobra.Command) (*Config, error) {
 	err := viper.BindPFlags(cmd.Flags())
-
 	if err != nil {
 		return nil, err
 	}
@@ -60,7 +59,7 @@ func LoadConfig(cmd *cobra.Command) (*Config, error) {
 	config := new(Config)
 
 	if err := viper.Unmarshal(&config); err != nil {
-		logrus.Fatalf("Unable to decode into struct")
+		zap.L().Sugar().Fatalf("Unable to decode into struct")
 	}
 
 	fmt.Println(config)

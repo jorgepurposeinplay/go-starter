@@ -2,17 +2,18 @@ package api
 
 import (
 	"fmt"
-	"github.com/oakeshq/go-starter/config"
-	"github.com/oakeshq/go-starter/internal/storage"
-	"github.com/oakeshq/go-starter/pkg/router"
-	"github.com/oakeshq/go-starter/pkg/storage/dialer"
-	"github.com/sirupsen/logrus"
-	"github.com/stretchr/testify/require"
-	"github.com/stretchr/testify/suite"
 	"io/ioutil"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/oakeshq/go-starter/config"
+	"github.com/oakeshq/go-starter/internal/storage"
+	"github.com/oakeshq/go-starter/pkg/router"
+	"github.com/oakeshq/go-starter/pkg/storage/dialer"
+	"github.com/stretchr/testify/require"
+	"github.com/stretchr/testify/suite"
+	"go.uber.org/zap"
 )
 
 type UserTestSuite struct {
@@ -22,9 +23,8 @@ type UserTestSuite struct {
 
 func TestCollection(t *testing.T) {
 	cfg, err := config.LoadTestConfig("../../config/config.test.yaml")
-
 	if err != nil {
-		logrus.Fatalf("Unable to read config %v", err)
+		zap.L().Sugar().Fatalf("Unable to read config %v", err)
 	}
 
 	db, err := dialer.Connect(cfg)
@@ -32,7 +32,7 @@ func TestCollection(t *testing.T) {
 
 	r := router.NewRouter()
 
-	//RegisterHandlers(r, db, cfg)
+	// RegisterHandlers(r, db, cfg)
 	api := NewAPI(cfg, r, db)
 
 	ts := &UserTestSuite{
